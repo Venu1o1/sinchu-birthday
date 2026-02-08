@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Sinchu ❤️</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins, sans-serif;}
+
+body{
+  background:black;
+  overflow:hidden;
+  color:white;
+}
+
+.center-screen{
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:black;
+  z-index:10;
+}
+
+button{
+  padding:15px 35px;
+  border:none;
+  border-radius:40px;
+  font-size:18px;
+  cursor:pointer;
+  transition:0.3s ease;
+}
+
+#startBtn{
+  background:white;
+  color:black;
+}
+
+#startBtn:hover{ transform:scale(1.1); }
+
+video{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:9;
+  display:none;
+}
+
+.fade-out{
+  animation:fadeOut 1.5s forwards;
+}
+
+@keyframes fadeOut{
+  to{opacity:0;visibility:hidden;}
+}
+
+#mainContent{
+  display:none;
+  min-height:100vh;
+  padding:60px 20px;
+  text-align:center;
+  background:url('https://t4.ftcdn.net/jpg/17/92/60/93/360_F_1792609331_KAdvDM1gGEbP5DSplFkGYccZOqlnCwzM.jpg') center/cover no-repeat;
+}
+
+.overlay{
+  background:rgba(0,0,0,0.6);
+  min-height:100vh;
+  padding:60px 20px;
+}
+
+h1{margin-bottom:20px;font-size:32px;}
+
+#typedText{
+  max-width:700px;
+  margin:20px auto;
+  line-height:1.8;
+  font-size:18px;
+  min-height:150px;
+}
+
+.popup-container{
+  margin-top:30px;
+  display:none;
+}
+
+.popup-btn{
+  display:block;
+  margin:10px auto;
+  background:#ff4d6d;
+  color:white;
+}
+
+.popup-btn:hover{transform:scale(1.05);}
+
+.photo-display{
+  margin-top:20px;
+  display:none;
+}
+
+.photo-display img{
+  max-width:90%;
+  border-radius:15px;
+}
+
+#roseBtn{
+  display:none;
+  margin-top:30px;
+  background:#c9184a;
+  color:white;
+}
+
+#ending{
+  position:fixed;
+  inset:0;
+  background:black;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  pointer-events:none;
+  transition:2s ease;
+  z-index:20;
+  text-align:center;
+  padding:20px;
+}
+
+#ending.show{
+  opacity:1;
+  pointer-events:all;
+}
+
+/* 🌹 PETALS */
+.petal{
+  position:fixed;
+  top:-40px;
+  width:18px;
+  height:18px;
+  background:radial-gradient(circle at 30% 30%, #ff4d6d, #800f2f);
+  border-radius:50% 70% 50% 70%;
+  opacity:0.9;
+  animation:fall linear forwards;
+  z-index:30;
+}
+
+@keyframes fall{
+  to{
+    transform:translateY(110vh) rotate(360deg);
+    opacity:0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="center-screen" id="firstScreen">
+  <button id="startBtn">Special</button>
+</div>
+
+<!-- FIXED VIDEO PATH -->
+<video id="introVideo" src="Bday.mp4" playsinline></video>
+
+<div id="mainContent">
+  <div class="overlay">
+    <h1>Happy Birthday Sinchu ❤️</h1>
+    <div id="typedText"></div>
+
+    <div class="popup-container" id="popupContainer">
+      <button class="popup-btn" onclick="showPhoto(1)">Bidode kane ninge🫠</button>
+      <button class="popup-btn" onclick="showPhoto(2)">Ethakond hogla hinge?😂</button>
+      <button class="popup-btn" onclick="showPhoto(3)">Ganda Hendthi nodu🫣</button>
+      <button class="popup-btn" onclick="showPhoto(4)">Nam magu hinge iralla?👀</button>
+    </div>
+
+    <div class="photo-display" id="photoDisplay">
+      <img id="photoImg" src="">
+    </div>
+
+    <button id="roseBtn">Take the rose🌹</button>
+  </div>
+</div>
+
+<div id="ending">
+  <div>
+    <h2>You really are my special one sinchu!!🫂<br>I love you soo much sundri 💗</h2>
+  </div>
+</div>
+
+<script>
+
+// MESSAGE
+const message = `My dearest Sinchu,Today isn’t just another day — it’s the day the world was gifted with someone incredibly special. You have this beautiful way of making everything feel lighter, warmer, and more meaningful just by being you...
+
+Always yours ❤️`;
+
+// PHOTOS
+const photos = {
+  1: "WhatsApp Image 2026-02-08 at 8.10.29 PM.jpeg",
+  2: "WhatsApp Image 2026-02-07 at 11.11.05 PM.jpeg",
+  3: "WhatsApp Image 2026-02-07 at 11.10.19 PM.jpeg",
+  4: "WhatsApp Image 2026-02-07 at 11.11.06 PM.jpeg"
+};
+
+const startBtn = document.getElementById("startBtn");
+const firstScreen = document.getElementById("firstScreen");
+const video = document.getElementById("introVideo");
+const mainContent = document.getElementById("mainContent");
+const typedText = document.getElementById("typedText");
+const popupContainer = document.getElementById("popupContainer");
+const roseBtn = document.getElementById("roseBtn");
+
+startBtn.onclick = () => {
+  firstScreen.style.display = "none";
+  video.style.display = "block";
+  video.play();
+};
+
+video.onended = () => {
+  video.classList.add("fade-out");
+  setTimeout(() => {
+    video.style.display = "none";
+    mainContent.style.display = "block";
+    document.body.style.overflow = "auto";
+    typeMessage();
+  }, 1500);
+};
+
+function typeMessage(){
+  typedText.innerHTML = "";
+  let i=0;
+  const interval=setInterval(()=>{
+    if(i<message.length){
+      typedText.innerHTML += message[i] === "\n" ? "<br>" : message[i];
+      i++;
+    }else{
+      clearInterval(interval);
+      popupContainer.style.display="block";
+    }
+  },35);
+}
+
+function showPhoto(num){
+  document.getElementById("photoImg").src = photos[num];
+  document.getElementById("photoDisplay").style.display = "block";
+  roseBtn.style.display = "inline-block";
+}
+
+// 🌹 CREATE PETALS
+function createPetals(){
+  for(let i=0;i<30;i++){
+    const petal=document.createElement("div");
+    petal.classList.add("petal");
+    petal.style.left=Math.random()*100+"vw";
+    petal.style.animationDuration=(4+Math.random()*3)+"s";
+    document.body.appendChild(petal);
+    setTimeout(()=>petal.remove(),7000);
+  }
+}
+
+roseBtn.onclick = () => {
+  createPetals();
+  setTimeout(()=>{
+    document.getElementById("ending").classList.add("show");
+  },2000);
+};
+
+</script>
+
+</body>
+</html>
+
