@@ -19,15 +19,43 @@ body{
   color:white;
 }
 
+/* COUNTDOWN SCREEN */
+#countdownScreen{
+  position:fixed;
+  inset:0;
+  background:black;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  z-index:50;
+  text-align:center;
+}
+
+#countdown{
+  font-size:clamp(28px,6vw,48px);
+}
+
+.glowText{
+  font-size:clamp(40px,8vw,70px);
+  font-weight:bold;
+  animation:glow 1s infinite alternate;
+}
+
+@keyframes glow{
+  from{ text-shadow:0 0 10px #ff4d6d; }
+  to{ text-shadow:0 0 30px #ff99ac; }
+}
+
 /* CENTER SCREEN */
 .center-screen{
   position:fixed;
   inset:0;
-  display:flex;
+  display:none;
   align-items:center;
   justify-content:center;
   background:black;
-  z-index:10;
+  z-index:40;
 }
 
 /* BUTTONS */
@@ -46,10 +74,6 @@ button{
   color:black;
 }
 
-#startBtn:hover{ 
-  transform:scale(1.08); 
-}
-
 /* VIDEO */
 video{
   position:fixed;
@@ -57,11 +81,10 @@ video{
   width:100%;
   height:100%;
   object-fit:cover;
-  z-index:9;
+  z-index:30;
   display:none;
 }
 
-/* FADE */
 .fade-out{
   animation:fadeOut 1.5s forwards;
 }
@@ -85,13 +108,11 @@ video{
   padding:40px 15px;
 }
 
-/* HEADINGS */
 h1{
   margin-bottom:20px;
   font-size:clamp(22px, 5vw, 36px);
 }
 
-/* MESSAGE TEXT */
 #typedText{
   max-width:800px;
   margin:20px auto;
@@ -101,7 +122,6 @@ h1{
   padding:0 10px;
 }
 
-/* POPUP BUTTONS */
 .popup-container{
   margin-top:30px;
   display:none;
@@ -116,11 +136,6 @@ h1{
   max-width:350px;
 }
 
-.popup-btn:hover{
-  transform:scale(1.05);
-}
-
-/* PHOTO DISPLAY */
 .photo-display{
   margin-top:20px;
   display:none;
@@ -133,7 +148,6 @@ h1{
   border-radius:15px;
 }
 
-/* ROSE BUTTON */
 #roseBtn{
   display:none;
   margin-top:30px;
@@ -141,7 +155,6 @@ h1{
   color:white;
 }
 
-/* ENDING */
 #ending{
   position:fixed;
   inset:0;
@@ -152,7 +165,7 @@ h1{
   opacity:0;
   pointer-events:none;
   transition:2s ease;
-  z-index:20;
+  z-index:60;
   text-align:center;
   padding:20px;
 }
@@ -160,10 +173,6 @@ h1{
 #ending.show{
   opacity:1;
   pointer-events:all;
-}
-
-#ending h2{
-  font-size:clamp(18px, 5vw, 28px);
 }
 
 /* PETALS */
@@ -176,7 +185,7 @@ h1{
   border-radius:50% 70% 50% 70%;
   opacity:0.9;
   animation:fall linear forwards;
-  z-index:30;
+  z-index:55;
 }
 
 @keyframes fall{
@@ -190,11 +199,16 @@ h1{
 
 <body>
 
+<!-- COUNTDOWN -->
+<div id="countdownScreen">
+  <div id="countdown"></div>
+</div>
+
+<!-- SPECIAL BUTTON -->
 <div class="center-screen" id="firstScreen">
   <button id="startBtn">Special</button>
 </div>
 
-<!-- FIXED VIDEO PATH -->
 <video id="introVideo" src="Bday.mp4" playsinline></video>
 
 <div id="mainContent">
@@ -225,10 +239,66 @@ h1{
 
 <script>
 
-// MESSAGE
-const message = `🎂❤️
+// ===== COUNTDOWN TARGET =====
+const targetDate = new Date(new Date().getTime() + 15000).getTime();
 
-I don’t even know where to start because every time I try to write something normal and sweet, I remember who I’m writing about… and suddenly it has to be dramatic, slightly chaotic, and completely obsessed. Just like us. 😌🔥
+const countdownEl = document.getElementById("countdown");
+const countdownScreen = document.getElementById("countdownScreen");
+const firstScreen = document.getElementById("firstScreen");
+
+let loveSequenceStarted = false;
+
+const countdownInterval = setInterval(() => {
+  const now = new Date().getTime();
+  const distance = targetDate - now;
+
+  if(distance <= 3000 && !loveSequenceStarted){
+    loveSequenceStarted = true;
+    clearInterval(countdownInterval);
+    startLoveSequence();
+    return;
+  }
+
+  const days = Math.floor(distance / (1000*60*60*24));
+  const hours = Math.floor((distance % (1000*60*60*24))/(1000*60*60));
+  const minutes = Math.floor((distance % (1000*60*60))/(1000*60));
+  const seconds = Math.floor((distance % (1000*60))/1000);
+
+  countdownEl.innerHTML =
+    `${days}d ${hours}h ${minutes}m ${seconds}s`;
+},1000);
+
+function startLoveSequence(){
+  countdownEl.classList.add("glowText");
+  countdownEl.innerHTML = "I";
+
+  setTimeout(()=>{ countdownEl.innerHTML="LOVE"; },1000);
+  setTimeout(()=>{ countdownEl.innerHTML="YOU"; },2000);
+
+  setTimeout(()=>{
+    createPetalsExplosion();
+    setTimeout(()=>{
+      countdownScreen.style.display="none";
+      firstScreen.style.display="flex";
+    },2000);
+  },3000);
+}
+
+// PETAL EXPLOSION
+function createPetalsExplosion(){
+  for(let i=0;i<60;i++){
+    const petal=document.createElement("div");
+    petal.classList.add("petal");
+    petal.style.left=Math.random()*100+"vw";
+    petal.style.animationDuration=(3+Math.random()*3)+"s";
+    document.body.appendChild(petal);
+    setTimeout(()=>petal.remove(),6000);
+  }
+}
+
+// ===== ORIGINAL SCRIPT =====
+
+const message = `I don’t even know where to start because every time I try to write something normal and sweet, I remember who I’m writing about… and suddenly it has to be dramatic, slightly chaotic, and completely obsessed. Just like us. 😌🔥
 
 First of all, thank you for being born. Truly. Because imagine a world without you? Boring. Dry. Emotionally under-seasoned. The universe really said, “Let’s add a little spice, a little attitude, a little ‘I will roast you but also love you forever’ energy.” And boom. You. 💅✨
 
@@ -257,7 +327,6 @@ I LOVE YOU SOO MUCH SINCHU😘🎈
 CLICK THESE ONE BY ONE👇
 `;
 
-// PHOTOS
 const photos = {
   1: "WhatsApp Image 2026-02-08 at 8.10.29 PM.jpeg",
   2: "WhatsApp Image 2026-02-07 at 11.11.05 PM.jpeg",
@@ -266,7 +335,6 @@ const photos = {
 };
 
 const startBtn = document.getElementById("startBtn");
-const firstScreen = document.getElementById("firstScreen");
 const video = document.getElementById("introVideo");
 const mainContent = document.getElementById("mainContent");
 const typedText = document.getElementById("typedText");
@@ -309,20 +377,8 @@ function showPhoto(num){
   roseBtn.style.display = "inline-block";
 }
 
-// 🌹 CREATE PETALS
-function createPetals(){
-  for(let i=0;i<30;i++){
-    const petal=document.createElement("div");
-    petal.classList.add("petal");
-    petal.style.left=Math.random()*100+"vw";
-    petal.style.animationDuration=(4+Math.random()*3)+"s";
-    document.body.appendChild(petal);
-    setTimeout(()=>petal.remove(),7000);
-  }
-}
-
 roseBtn.onclick = () => {
-  createPetals();
+  createPetalsExplosion();
   setTimeout(()=>{
     document.getElementById("ending").classList.add("show");
   },2000);
@@ -332,4 +388,3 @@ roseBtn.onclick = () => {
 
 </body>
 </html>
-
